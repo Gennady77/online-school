@@ -28,7 +28,10 @@ export class HttpMockInterceptor implements HttpInterceptor {
     }
 
     return new Observable(observer => {
-      observer.next(new HttpResponse<any>({body, status}))
+      setTimeout(() => {
+        observer.next(new HttpResponse<any>({body, status}));
+        observer.complete();
+      }, 2000);
     });
   }
 }

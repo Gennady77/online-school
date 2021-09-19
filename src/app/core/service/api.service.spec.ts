@@ -4,7 +4,7 @@ import { ApiService } from './api.service';
 import { httpClientMockGet, httpClientMockProvider } from "../../../test-helpers/providers";
 import { HttpClient } from "@angular/common/http";
 
-fdescribe('ApiService', () => {
+describe('ApiService', () => {
   let service: ApiService;
   let httpClientMock: jasmine.SpyObj<HttpClient>;
 
