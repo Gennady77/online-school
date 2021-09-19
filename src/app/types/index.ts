@@ -3,3 +3,7 @@ export interface CourseData {
   title: string,
   date: Date
 }
+
+export type JsonResponse<T> = {
+  data: T;
+}
