@@ -6,6 +6,11 @@ import { MainPageResolver } from "./core/resolver/main-page.resolver";
 const routes: Routes = [{
   path: '',
   component: MainPage,
+  resolve: { coursesList: MainPageResolver },
+  pathMatch: 'full'
+}, {
+  path: 'courses/:id',
+  component: MainPage,
   resolve: { coursesList: MainPageResolver }
 }];
 

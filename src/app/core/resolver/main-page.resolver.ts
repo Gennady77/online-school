@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   Resolve
 } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -13,7 +14,7 @@ export class MainPageResolver implements Resolve<CourseData[]> {
   constructor(private apiService: ApiService) {
   }
 
-  resolve(): Observable<CourseData[]> {
-    return this.apiService.get('/courses');
+  resolve(route: ActivatedRouteSnapshot): Observable<CourseData[]> {
+    return this.apiService.get('/courses', route.params);
   }
 }

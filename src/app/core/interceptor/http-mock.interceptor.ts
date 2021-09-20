@@ -6,7 +6,7 @@ import {
   HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getCourses } from "./data";
+import { getUserCourseList } from "./data";
 import { JsonResponse } from "../../types";
 
 @Injectable()
@@ -23,7 +23,7 @@ export class HttpMockInterceptor implements HttpInterceptor {
     switch(request.url) {
       case '/courses':
         if(request.method === 'GET') {
-          body.data = getCourses;
+          body.data = getUserCourseList(request.params.get('id'));
         }
     }
 

@@ -1,4 +1,6 @@
-export const getCourses = [{
+import { CourseData } from "../../types";
+
+export const allCourses = [{
   id: 1,
   title: 'Алгоритмы',
   date: new Date('2021-09-01')
@@ -19,3 +21,17 @@ export const getCourses = [{
   title: 'CSS методология',
   date: new Date('2021-10-21')
 }];
+
+export const userCourses: {[key: string]: CourseData[]} = {};
+
+export function getUserCourseList(id: string | null): CourseData[] {
+  if(id === null) {
+    return allCourses;
+  }
+
+  if(!userCourses[id]) {
+    userCourses[id] = [];
+  }
+
+  return userCourses[id];
+}
