@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table" *ngIf="courseList.length">
   <thead>
   <tr>
     <th>Название</th>
@@ -12,3 +12,4 @@
   </tr>
   </tbody>
 </table>
+<div *ngIf="!courseList.length" class="text-center fs-3 fw-bold">Список курсов пуст.</div>
