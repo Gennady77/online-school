@@ -1,6 +1,7 @@
 import { Provider } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
+import { ApiService } from "../app/core/service/api.service";
 
 export let httpClientMockGet: Subject<any>;
 export const httpClientMockProvider: Provider = {
@@ -11,5 +12,11 @@ export const httpClientMockProvider: Provider = {
     spy.get.and.returnValue(httpClientMockGet.asObservable());
 
     return spy;
+  }
+}
+
+export const apiServiceMockProvider: Provider = {
+  provide: ApiService, useFactory: () => {
+    return jasmine.createSpyObj('ApiService', ['get'])
   }
 }

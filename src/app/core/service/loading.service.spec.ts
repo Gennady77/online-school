@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { LoadingService } from './loading.service';
 
-fdescribe('LoadingService', () => {
+describe('LoadingService', () => {
   let service: LoadingService;
 
   beforeEach(() => {

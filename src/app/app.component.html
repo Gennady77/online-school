@@ -16,19 +16,6 @@
     </svg>
   </header>
   <div class="container">
-    <table class="table" *ngIf="(courseList | async) as list">
-      <thead>
-        <tr>
-          <th>Название</th>
-          <th>Дата</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let course of list">
-          <td>{{ course.title }}</td>
-          <td>{{ course.date | date: 'mediumDate' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <router-outlet></router-outlet>
   </div>
 </div>
