@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from "./core/core.module";
 import { HttpClientModule } from "@angular/common/http";
 import { PageModule } from "./page/page.module";
+import { CookieService } from "ngx-cookie-service";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { PageModule } from "./page/page.module";
     HttpClientModule,
     PageModule
   ],
-  providers: [],
+  providers: [
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

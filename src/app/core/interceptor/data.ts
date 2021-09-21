@@ -1,4 +1,4 @@
-import { CourseData } from "../../types";
+import { CourseData, User } from "../../types";
 
 export const allCourses = [{
   id: 1,
@@ -35,3 +35,5 @@ export function getUserCourseList(id: string | null): CourseData[] {
 
   return userCourses[id];
 }
+
+export const users: User[] = [];

@@ -7,3 +7,13 @@ export interface CourseData {
 export type JsonResponse<T> = {
   data: T;
 }
+
+export type AuthSettings = {
+  token: string;
+  userEmail: string;
+}
+
+export type User = {
+  id: number;
+  email: string;
+};
