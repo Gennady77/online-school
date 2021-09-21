@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainPage } from "./page/main/main.page";
 import { MainPageResolver } from "./core/resolver/main-page.resolver";
 import { NotFoundPage } from "./page/not-found/not-found.page";
+import { LoginPage } from "./page/login/login.page";
 
 const routes: Routes = [{
   path: '',
@@ -13,6 +14,9 @@ const routes: Routes = [{
   path: 'courses/:id',
   component: MainPage,
   resolve: { coursesList: MainPageResolver }
+}, {
+  path: 'login',
+  component: LoginPage
 }, {
   path: '**',
   component: NotFoundPage

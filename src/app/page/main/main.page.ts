@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseData } from "../../types";
 import { ActivatedRoute } from "@angular/router";
+import { AuthService } from "../../core/service/auth.service";
 
 @Component({
   selector: 'app-main',
@@ -9,9 +10,16 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class MainPage implements OnInit {
   courseList: CourseData[];
+  isLoggedIn = false;
 
-  constructor(private route: ActivatedRoute,) {
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+  ) {
     this.courseList = route.snapshot.data.coursesList;
+    authService.isLoggedIn$.subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+    })
   }
 
   ngOnInit(): void {

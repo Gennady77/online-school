@@ -5,20 +5,4 @@
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-<div class="container">
-  <header class="row mb-5 align-items-end border-bottom">
-    <ul ngbNav class="nav col-11">
-      <li ngbNavItem><a ngbNavLink>Список курсов</a></li>
-      <li *ngIf="isLoggedIn" ngbNavItem><a ngbNavLink>Мои курсы</a></li>
-    </ul>
-    <div class="login col d-flex justify-content-center">
-      <svg *ngIf="isLoggedIn" class="p-1" width="100%" height="100%" fill="currentColor">
-        <use xlink:href="#person-circle"/>
-      </svg>
-      <a href class="nav-link align-self-end" *ngIf="!isLoggedIn">Login</a>
-    </div>
-  </header>
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+<router-outlet></router-outlet>

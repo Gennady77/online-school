@@ -22,9 +22,9 @@ describe('MainPageResolver', () => {
 
   describe('resolve', () => {
     it('should call get method of ApiService', () => {
-      resolver.resolve();
+      resolver.resolve({params: 'test params'} as any);
 
-      expect(apiServiceMock.get).toHaveBeenCalledWith('/courses');
+      expect(apiServiceMock.get).toHaveBeenCalledWith('/courses', 'test params');
     });
   });
 });

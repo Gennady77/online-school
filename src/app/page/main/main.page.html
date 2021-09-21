@@ -1,15 +1,31 @@
-<table class="table" *ngIf="courseList.length">
-  <thead>
-  <tr>
-    <th>Название</th>
-    <th>Дата</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let course of courseList">
-    <td>{{ course.title }}</td>
-    <td>{{ course.date | date: 'mediumDate' }}</td>
-  </tr>
-  </tbody>
-</table>
-<div *ngIf="!courseList.length" class="text-center fs-3 fw-bold">Список курсов пуст.</div>
+<div class="container">
+  <header class="row mb-5 align-items-end border-bottom">
+    <ul ngbNav class="nav col-11">
+      <li ngbNavItem><a ngbNavLink>Список курсов</a></li>
+      <li *ngIf="isLoggedIn" ngbNavItem><a ngbNavLink>Мои курсы</a></li>
+    </ul>
+    <div class="login col d-flex justify-content-center">
+      <svg *ngIf="isLoggedIn" class="p-1" width="100%" height="100%" fill="currentColor">
+        <use xlink:href="#person-circle"/>
+      </svg>
+      <a [routerLink]="['login']" class="nav-link align-self-end" *ngIf="!isLoggedIn">Login</a>
+    </div>
+  </header>
+  <div class="container">
+    <table class="table" *ngIf="courseList.length">
+      <thead>
+      <tr>
+        <th>Название</th>
+        <th>Дата</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let course of courseList">
+        <td>{{ course.title }}</td>
+        <td>{{ course.date | date: 'mediumDate' }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!courseList.length" class="text-center fs-3 fw-bold">Список курсов пуст.</div>
+  </div>
+</div>
