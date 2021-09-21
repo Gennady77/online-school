@@ -1,1 +1,26 @@
-<p>login works!</p>
+<div class="d-flex flex-column position-fixed w-100 h-100 align-items-center justify-content-center">
+  <form
+    [formGroup]="formGroup"
+    (submit)="onSubmit()"
+    class="login-form px-4 py-2"
+  >
+    <h2 class="mb-5">Добро пожаловать!</h2>
+    <div class="mb-3">
+      <label for="inputEmail" class="form-label">Email</label>
+      <input class="form-control" id="inputEmail" formControlName="userEmail">
+      <div class="errors-container">
+        <div *ngIf="userEmail.invalid && userEmail.touched && userEmail.errors?.email" class="app-invalid-text">Пожалуйста, введите email правильно</div>
+        <div *ngIf="userEmail.invalid && userEmail.touched && userEmail.errors?.required" class="app-invalid-text">Поле обязательно для заполнения</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword" class="form-label">Password</label>
+      <input type="password" class="form-control" id="inputPassword" formControlName="userPass">
+      <div class="errors-container">
+        <div *ngIf="userPass.invalid && userPass.touched && userPass.errors?.required" class="app-invalid-text">Поле обязательно для заполнения</div>
+      </div>
+    </div>
+    <button [disabled]="formGroup.invalid" type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+

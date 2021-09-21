@@ -5,6 +5,7 @@ import { NotFoundPage } from './not-found/not-found.page';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { LoginPage } from './login/login.page';
 import { RouterModule } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
 
 
 
@@ -17,7 +18,8 @@ import { RouterModule } from "@angular/router";
   imports: [
     CommonModule,
     NgbModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ]
 })
 export class PageModule { }
