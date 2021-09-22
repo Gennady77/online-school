@@ -8,7 +8,7 @@
       <svg *ngIf="isLoggedIn" class="p-1" width="100%" height="100%" fill="currentColor">
         <use xlink:href="#person-circle"/>
       </svg>
-      <a [routerLink]="['login']" class="nav-link align-self-end" *ngIf="!isLoggedIn">Login</a>
+      <a [routerLink]="['/login']" class="nav-link align-self-end" *ngIf="!isLoggedIn">Login</a>
     </div>
   </header>
   <div class="container">

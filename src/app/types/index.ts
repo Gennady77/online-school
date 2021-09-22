@@ -16,4 +16,5 @@ export type AuthSettings = {
 export type User = {
   id: number;
   email: string;
+  token?: string;
 };

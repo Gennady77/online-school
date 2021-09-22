@@ -1,7 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';
-import { apiServiceMockPostSubject, apiServiceMockProvider } from "../../../test-helpers/providers";
+import {
+  apiServiceMockGetSubject,
+  apiServiceMockPostSubject,
+  apiServiceMockProvider
+} from "../../../test-helpers/providers";
 import { ApiService } from "./api.service";
 
 describe('AuthService', () => {
@@ -23,6 +27,19 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('isLoggedIn$', () => {
+    it('should call ApiService with token url', () => {
+      const spy = jasmine.createSpy();
+
+      service.isLoggedIn$.subscribe(spy);
+
+      apiServiceMockGetSubject.next();
+
+      expect(apiService.get).toHaveBeenCalledWith('/token');
+      expect(spy).toHaveBeenCalledWith(true);
+    });
+  });
+
   describe('login', () => {
     it('should call api service', () => {
       service.login('mock parameters');
@@ -36,6 +53,7 @@ describe('AuthService', () => {
 
       apiServiceMockPostSubject.next('auth data');
 
+      service.isLoggedIn$.subscribe();
       service.isLoggedIn$.subscribe(spy);
 
       expect(spy).toHaveBeenCalledWith(true);

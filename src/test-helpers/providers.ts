@@ -18,12 +18,16 @@ export const httpClientMockProvider: Provider = {
 }
 
 export let apiServiceMockPostSubject: Subject<any>;
+export let apiServiceMockGetSubject: Subject<any>;
 export const apiServiceMockProvider: Provider = {
   provide: ApiService, useFactory: () => {
     const spy = jasmine.createSpyObj('ApiService', ['get', 'post']);
 
     apiServiceMockPostSubject = new Subject();
+    apiServiceMockGetSubject = new Subject();
+
     spy.post.and.returnValue(apiServiceMockPostSubject);
+    spy.get.and.returnValue(apiServiceMockGetSubject);
 
     return spy;
   }

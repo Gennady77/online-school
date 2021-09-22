@@ -42,12 +42,18 @@ export class HttpMockInterceptor implements HttpInterceptor {
             });
           }
 
+          user.token = token;
           this.cookieService.set('token', token);
 
           body.data = user;
           status = 200;
         }
         break;
+      case '/token':
+        if(request.method === 'GET') {
+          body.data = users.find(item => item.token === this.cookieService.get('token'));
+          status = 200;
+        }
     }
 
     return new Observable(observer => {

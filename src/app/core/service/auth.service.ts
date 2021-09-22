@@ -14,7 +14,12 @@ export class AuthService {
   private userSession = new UserSession();
 
   constructor(private apiService: ApiService ) {
+    let hasCheckedSession = false;
     this.isLoggedIn$ = defer(() => {
+      if(!hasCheckedSession) {
+        hasCheckedSession = true;
+        return this.loginFromCookie();
+      }
       return of(this.userSession);
     }).pipe(mergeMap(userSession => userSession.isLoggedIn$$));
 
@@ -27,5 +32,14 @@ export class AuthService {
         return authSettings;
       })
     )
+  }
+
+  private loginFromCookie(): Observable<UserSession> {
+    return this.apiService.get<User>('/token').pipe(
+      map(response => {
+        this.userSession.onLogin(response);
+        return this.userSession;
+      })
+    );
   }
 }
