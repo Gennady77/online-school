@@ -9,7 +9,7 @@ export type JsonResponse<T> = {
 }
 
 export type AuthSettings = {
-  token: string;
+  id: string;
   userEmail: string;
 }
 

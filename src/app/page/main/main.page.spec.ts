@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { MainPage } from './main.page';
 import { ActivatedRoute } from "@angular/router";
+import { authServiceMockProvider } from "../../../test-helpers/providers";
 
 describe('MainPage', () => {
   let component: MainPage;
@@ -10,6 +11,7 @@ describe('MainPage', () => {
     await TestBed.configureTestingModule({
       providers: [
         MainPage,
+        authServiceMockProvider,
         {provide: ActivatedRoute, useValue: {
           snapshot: {
             data: {}
