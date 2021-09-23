@@ -3,3 +3,32 @@ $enable-negative-margins: true;
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-icons/font/bootstrap-icons.css';
+
+.errors-container {
+  margin-top: $form-feedback-margin-top;
+  height: 25px;
+}
+
+.app-invalid-text {
+  color: $form-feedback-invalid-color;
+  width: 100%;
+  @include font-size($form-feedback-font-size);
+  font-style: $form-feedback-font-style;
+}
+
+$focus-box-shadow: 0 0 $input-btn-focus-blur $input-focus-width rgba($form-feedback-invalid-color, $input-btn-focus-color-opacity);
+
+[formControlName].ng-touched.ng-invalid {
+  border-color: $form-feedback-invalid-color;
+
+  padding-right: $input-height-inner;
+  background-image: escape-svg($form-feedback-icon-invalid);
+  background-repeat: no-repeat;
+  background-position: right $input-height-inner-quarter center;
+  background-size: $input-height-inner-half $input-height-inner-half;
+
+  &:focus {
+    border-color: $form-feedback-invalid-color;
+    box-shadow: $focus-box-shadow;
+  }
+}

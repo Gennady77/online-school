@@ -6,6 +6,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { LoginPage } from './login/login.page';
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
+import { SharedModule } from "../shared/shared.module";
 
 
 
@@ -16,10 +17,11 @@ import { ReactiveFormsModule } from "@angular/forms";
     LoginPage
   ],
   imports: [
-    CommonModule,
     NgbModule,
+    CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class PageModule { }

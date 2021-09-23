@@ -6,15 +6,3 @@
   width: 400px;
   height: 400px;
 }
-
-.app-invalid-text {
-  color: $form-feedback-invalid-color;
-  width: 100%;
-  @include font-size($form-feedback-font-size);
-  font-style: $form-feedback-font-style;
-}
-
-.errors-container {
-  margin-top: $form-feedback-margin-top;
-  height: 25px;
-}

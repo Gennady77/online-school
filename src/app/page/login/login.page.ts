@@ -30,8 +30,6 @@ export class LoginPage implements OnInit {
     if (this.formGroup.valid) {
       this.authService.login(this.formGroup.value).subscribe((user: User) => {
         this.router.navigate([`/courses/${user.id}`]);
-      }, error => {
-        console.log('%%%%%%%%', error)
       });
     }
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { defer, Observable, of } from "rxjs";
 import { User } from "../../types";
 import { ApiService } from "./api.service";
-import { UserSession } from "./UserSession";
+import { UserSession } from "./user-session";
 import { map, mergeMap } from "rxjs/operators";
 
 @Injectable({
