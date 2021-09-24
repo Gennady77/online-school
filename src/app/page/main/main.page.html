@@ -95,10 +95,76 @@
           >{{ courseDuration.errors?.numeric.message }}</div>
         </div>
       </div>
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Тип курса</label>
+        <div class="col-sm-9 btn-group btn-group-toggle" ngbRadioGroup name="courseType" formControlName="courseType">
+          <label ngbButtonLabel class="btn btn-primary">
+            <input ngbButton class="btn-check" type="radio" [value]="courseTypeEnum.ONLINE">Онлайн
+          </label>
+          <label ngbButtonLabel class="btn btn-primary">
+            <input ngbButton class="btn-check" type="radio" [value]="courseTypeEnum.OFFLINE">Оффлайн
+          </label>
+        </div>
+      </div>
+      <div *ngIf="courseType.value === courseTypeEnum.ONLINE" class="mb-3 row">
+        <label for="courseUrl" class="col-sm-3 col-form-label">Url курса</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" id="courseUrl" formControlName="courseUrl" />
+          <div class="errors-container">
+            <div
+              *ngIf="courseUrl.invalid && courseUrl.touched && courseUrl.errors?.required"
+              class="app-invalid-text"
+            >{{ courseUrl.errors?.required.message }}</div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="courseType.value === courseTypeEnum.OFFLINE" class="mb-3">
+        <div class="row">
+          <label for="coursePlaceBuilding" class="col-sm-3 col-form-label">Здание</label>
+          <div class="col-9 row">
+            <div class="col-sm-4">
+              <select id="coursePlaceBuilding" class="form-select" formControlName="coursePlaceBuilding">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <label for="coursePlaceRoom" class="col-sm-4 col-form-label text-end">Аудитория</label>
+            <div class="col-sm-4">
+              <select id="coursePlaceRoom" class="form-select" formControlName="coursePlaceRoom">
+                <option value="1">101</option>
+                <option value="2">110</option>
+                <option value="3">113</option>
+                <option value="4">201</option>
+                <option value="5">304</option>
+              </select>
+            </div>
+            <div class="errors-container">
+              <div
+                *ngIf=" coursePlaceBuilding.invalid && coursePlaceBuilding.touched && coursePlaceBuilding.errors?.required ||
+                        coursePlaceRoom.invalid && coursePlaceRoom.touched && coursePlaceRoom.errors?.required"
+                class="app-invalid-text"
+              >Поля обязательные для заполнения</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="courseComment" class="form-label">Комментарий</label>
+        <textarea id="courseComment" class="form-control" rows="4" formControlName="courseComment"></textarea>
+        <div class="errors-container">
+          <div
+            *ngIf="courseComment.invalid && courseComment.touched && courseComment.errors?.maxlength"
+            class="app-invalid-text"
+          >Максимум 200 символов</div>
+        </div>
+      </div>
     </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
-    <button type="button" class="btn btn-danger" [disabled]="formGroup.invalid" (click)="onSubmit()">Ok</button>
+    <button type="button" class="btn btn-danger" [disabled]="formGroup.touched && formGroup.invalid" (click)="onSubmit()">Ok</button>
   </div>
 </ng-template>

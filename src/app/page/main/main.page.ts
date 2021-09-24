@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CourseData } from "../../types";
+import { COURSE_TYPE, CourseData } from "../../types";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../core/service/auth.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppValidators } from "../../core/service/validators";
 
 @Component({
@@ -15,14 +15,27 @@ export class MainPage implements OnInit {
   courseList: CourseData[];
   isLoggedIn = false;
 
+  courseTypeEnum = COURSE_TYPE;
+
   courseName = new FormControl('', [AppValidators.required()]);
   courseDate = new FormControl('', [AppValidators.required()]);
   courseDuration = new FormControl('', [AppValidators.required(), AppValidators.numeric()]);
+  courseType = new FormControl(COURSE_TYPE.ONLINE);
+  courseUrl = new FormControl('', [AppValidators.required()]);
+  coursePlaceBuilding = new FormControl('', [AppValidators.required()]);
+  coursePlaceRoom = new FormControl('', [AppValidators.required()]);
+  courseComment = new FormControl('', [Validators.maxLength(200)]);
+
 
   formGroup = new FormGroup({
     courseName: this.courseName,
     courseDate: this.courseDate,
-    courseDuration: this.courseDuration
+    courseDuration: this.courseDuration,
+    courseType: this.courseType,
+    courseUrl: this.courseUrl,
+    coursePlaceBuilding: this.coursePlaceBuilding,
+    coursePlaceRoom: this.coursePlaceRoom,
+    courseComment: this.courseComment
   });
 
   constructor(
@@ -33,7 +46,11 @@ export class MainPage implements OnInit {
     this.courseList = route.snapshot.data.coursesList;
     authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
-    })
+    });
+
+    this.courseType.valueChanges.subscribe((val) => {
+      this.updateCourseType(val);
+    });
   }
 
   ngOnInit(): void {
@@ -46,10 +63,25 @@ export class MainPage implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.courseDuration);
+    this.formGroup.markAllAsTouched();
     // modal.close('Ok click');
     if(this.formGroup.valid) {
       console.log('=========', this.formGroup.value);
+    }
+  }
+
+  private updateCourseType(val: COURSE_TYPE) {
+    switch(val) {
+      case COURSE_TYPE.ONLINE:
+        this.courseUrl.enable();
+        this.coursePlaceBuilding.disable();
+        this.coursePlaceRoom.disable();
+        break;
+      case COURSE_TYPE.OFFLINE:
+        this.courseUrl.disable();
+        this.coursePlaceBuilding.enable();
+        this.coursePlaceRoom.enable();
+        break;
     }
   }
 }

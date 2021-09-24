@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $enable-negative-margins: true;
 
 /* Importing Bootstrap SCSS file. */
@@ -31,4 +33,8 @@ $focus-box-shadow: 0 0 $input-btn-focus-blur $input-focus-width rgba($form-feedb
     border-color: $form-feedback-invalid-color;
     box-shadow: $focus-box-shadow;
   }
+}
+
+.btn-primary.focus {
+  box-shadow: 0 0 0 $btn-focus-width rgba(map.get($theme-colors, 'primary'), .5);
 }

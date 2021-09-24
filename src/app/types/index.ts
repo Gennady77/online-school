@@ -18,3 +18,7 @@ export type User = {
   email: string;
   token?: string;
 };
+
+export enum COURSE_TYPE {
+  ONLINE = 1, OFFLINE= 2
+}
