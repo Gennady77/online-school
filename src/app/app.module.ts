@@ -7,6 +7,7 @@ import { CoreModule } from "./core/core.module";
 import { HttpClientModule } from "@angular/common/http";
 import { PageModule } from "./page/page.module";
 import { CookieService } from "ngx-cookie-service";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CookieService } from "ngx-cookie-service";
     AppRoutingModule,
     CoreModule,
     HttpClientModule,
-    PageModule
+    PageModule,
+    SharedModule
   ],
   providers: [
     CookieService

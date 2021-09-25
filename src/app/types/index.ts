@@ -1,9 +1,3 @@
-export interface CourseData {
-  id: number,
-  title: string,
-  date: Date
-}
-
 export type JsonResponse<T> = {
   data: T;
 }
@@ -21,4 +15,16 @@ export type User = {
 
 export enum COURSE_TYPE {
   ONLINE = 1, OFFLINE= 2
+}
+
+export type CourseData = {
+  courseId: number;
+  courseName: string;
+  courseDate: number;
+  courseDuration: number;
+  courseType: number;
+  courseUrl: string;
+  coursePlaceBuilding: number;
+  coursePlaceRoom: number;
+  courseComment: string;
 }

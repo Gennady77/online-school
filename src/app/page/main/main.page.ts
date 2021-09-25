@@ -5,6 +5,7 @@ import { AuthService } from "../../core/service/auth.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppValidators } from "../../core/service/validators";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
   selector: 'app-main',
@@ -14,6 +15,7 @@ import { AppValidators } from "../../core/service/validators";
 export class MainPage implements OnInit {
   courseList: CourseData[];
   isLoggedIn = false;
+  isLoading$$ = new BehaviorSubject(false);
 
   courseTypeEnum = COURSE_TYPE;
 
@@ -51,6 +53,8 @@ export class MainPage implements OnInit {
     this.courseType.valueChanges.subscribe((val) => {
       this.updateCourseType(val);
     });
+
+    this.updateCourseType(this.courseType.value);
   }
 
   ngOnInit(): void {
@@ -66,6 +70,10 @@ export class MainPage implements OnInit {
     this.formGroup.markAllAsTouched();
     // modal.close('Ok click');
     if(this.formGroup.valid) {
+      this.isLoading$$.next(true);
+      setTimeout(() => {
+        this.isLoading$$.next(false);
+      }, 2000);
       console.log('=========', this.formGroup.value);
     }
   }

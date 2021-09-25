@@ -4,7 +4,7 @@
       <li ngbNavItem><a [routerLink]="['/']" ngbNavLink>Список курсов</a></li>
       <li *ngIf="isLoggedIn" ngbNavItem><a [routerLink]="['/courses', '1']" ngbNavLink>Мои курсы</a></li>
       <li>
-        <a href title="добавить новый курс" (click)="onAddClick(content, $event)">
+        <a href (click)="onAddClick(content, $event)" title="Создать курс">
           <svg class="p-1" width="36" height="36" fill="currentColor">
             <use xlink:href="#plus-circle"/>
           </svg>
@@ -28,8 +28,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let course of courseList">
-          <td>{{ course.title }}</td>
-          <td>{{ course.date | date: 'mediumDate' }}</td>
+          <td>{{ course.courseName }}</td>
+          <td>{{ course.courseDate | date: 'mediumDate' }}</td>
         </tr>
       </tbody>
     </table>
@@ -38,6 +38,7 @@
 </div>
 
 <ng-template #content let-modal>
+  <app-loader *ngIf="isLoading$$ | async"></app-loader>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">Карточка курса</h4>
     <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
@@ -82,7 +83,7 @@
         </div>
       </div>
       <div class="mb-3">
-        <label for="courseDuration" class="form-label">Название курса</label>
+        <label for="courseDuration" class="form-label">Продолжительность курса в часах</label>
         <input type="text" class="form-control" id="courseDuration" formControlName="courseDuration" />
         <div class="errors-container">
           <div

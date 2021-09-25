@@ -54,6 +54,11 @@ export class HttpMockInterceptor implements HttpInterceptor {
           body.data = users.find(item => item.token === this.cookieService.get('token'));
           status = 200;
         }
+        break;
+      // case '/course':
+      //   if(request.method === 'POST' && request.params.has('userId')) {
+      //     storeCourse(request.params.get('userId'), );
+      //   }
     }
 
     return new Observable(observer => {
