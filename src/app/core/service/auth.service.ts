@@ -10,6 +10,9 @@ import { map, mergeMap } from "rxjs/operators";
 })
 export class AuthService {
   public isLoggedIn$: Observable<boolean>;
+  public get userId(): number | undefined {
+    return this.userSession.user?.id;
+  }
 
   private userSession = new UserSession();
 

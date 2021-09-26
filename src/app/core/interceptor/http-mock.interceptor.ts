@@ -6,8 +6,8 @@ import {
   HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getUserCourseList, users } from "./data";
-import { JsonResponse } from "../../types";
+import { getUserCourseList, storeCourse, users } from "./data";
+import { JsonErrorResponse, JsonResponse } from "../../types";
 import { CookieService } from "ngx-cookie-service";
 
 @Injectable()
@@ -20,6 +20,9 @@ export class HttpMockInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let body: JsonResponse<any> = {
       data: []
+    };
+    let bodyError: JsonErrorResponse = {
+      error: ''
     };
     let status = 200;
 
@@ -51,22 +54,38 @@ export class HttpMockInterceptor implements HttpInterceptor {
         break;
       case '/token':
         if(request.method === 'GET') {
-          body.data = users.find(item => item.token === this.cookieService.get('token'));
+          const user = users.find(item => item.token === this.cookieService.get('token'));
+          if (!user) {
+            status = 400;
+            bodyError.error = 'there is wrong token';
+          } else {
+            body.data = user;
+          }
+
+        }
+        break;
+      case '/course':
+        if(request.method === 'POST' && request.params.has('userId')) {
+          storeCourse(request.params);
           status = 200;
         }
         break;
-      // case '/course':
-      //   if(request.method === 'POST' && request.params.has('userId')) {
-      //     storeCourse(request.params.get('userId'), );
-      //   }
     }
 
     return new Observable(observer => {
       setTimeout(() => {
-        observer.next(new HttpResponse<any>({
-          body,
-          status
-        }));
+        if(status === 200) {
+          observer.next(new HttpResponse<any>({
+            body,
+            status
+          }));
+        } else {
+          observer.error(new HttpResponse<any>({
+            body: bodyError,
+            status
+          }));
+        }
+
         observer.complete();
       }, 2000);
     });

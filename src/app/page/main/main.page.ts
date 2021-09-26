@@ -6,6 +6,8 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppValidators } from "../../core/service/validators";
 import { BehaviorSubject } from "rxjs";
+import { ApiService } from "../../core/service/api.service";
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: 'app-main',
@@ -43,7 +45,8 @@ export class MainPage implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private apiService: ApiService,
   ) {
     this.courseList = route.snapshot.data.coursesList;
     authService.isLoggedIn$.subscribe((isLoggedIn) => {
@@ -69,12 +72,14 @@ export class MainPage implements OnInit {
   onSubmit() {
     this.formGroup.markAllAsTouched();
     // modal.close('Ok click');
-    if(this.formGroup.valid) {
+    console.log(this.authService.userId);
+    if(this.formGroup.valid && this.authService.userId) {
       this.isLoading$$.next(true);
-      setTimeout(() => {
-        this.isLoading$$.next(false);
-      }, 2000);
-      console.log('=========', this.formGroup.value);
+      this.apiService.post('/course', {userId: this.authService.userId, ...this.formGroup.value}).pipe(
+        finalize(() => {
+          this.isLoading$$.next(false);
+        })
+      );
     }
   }
 

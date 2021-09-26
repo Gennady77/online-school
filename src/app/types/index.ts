@@ -2,6 +2,10 @@ export type JsonResponse<T> = {
   data: T;
 }
 
+export type JsonErrorResponse = {
+  error: string;
+}
+
 export type AuthSettings = {
   id: string;
   userEmail: string;
@@ -23,8 +27,10 @@ export type CourseData = {
   courseDate: number;
   courseDuration: number;
   courseType: number;
-  courseUrl: string;
-  coursePlaceBuilding: number;
-  coursePlaceRoom: number;
+  courseUrl: string | null;
+  coursePlaceBuilding: number | null;
+  coursePlaceRoom: number | null;
   courseComment: string;
 }
+
+export type CourseRequest = CourseData | {userId: number};
