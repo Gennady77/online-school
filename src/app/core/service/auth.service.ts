@@ -3,7 +3,7 @@ import { defer, Observable, of } from "rxjs";
 import { User } from "../../types";
 import { ApiService } from "./api.service";
 import { UserSession } from "./user-session";
-import { map, mergeMap } from "rxjs/operators";
+import { catchError, map, mergeMap } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,8 @@ export class AuthService {
       map(response => {
         this.userSession.onLogin(response);
         return this.userSession;
-      })
+      }),
+      catchError(() => of(this.userSession))
     );
   }
 }

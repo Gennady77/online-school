@@ -4,6 +4,7 @@ import { MainPage } from "./page/main/main.page";
 import { MainPageResolver } from "./core/resolver/main-page.resolver";
 import { NotFoundPage } from "./page/not-found/not-found.page";
 import { LoginPage } from "./page/login/login.page";
+import { AuthGuard } from "./core/guard/auth.guard";
 
 const routes: Routes = [{
   path: '',
@@ -11,12 +12,13 @@ const routes: Routes = [{
   resolve: { coursesList: MainPageResolver },
   pathMatch: 'full'
 }, {
-  path: 'courses/:id',
-  component: MainPage,
-  resolve: { coursesList: MainPageResolver }
-}, {
   path: 'login',
   component: LoginPage
+}, {
+  path: 'courses/:id',
+  component: MainPage,
+  canActivate: [AuthGuard],
+  resolve: { coursesList: MainPageResolver }
 }, {
   path: '**',
   component: NotFoundPage
