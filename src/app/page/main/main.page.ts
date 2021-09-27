@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { COURSE_TYPE, CourseData } from "../../types";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../core/service/auth.service";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -45,12 +45,13 @@ export class MainPage implements OnInit, OnDestroy {
   private subscriber = new Subscriber();
 
   constructor(
-    private authService: AuthService,
-    private route: ActivatedRoute,
+    public authService: AuthService,
+    private activeRoute: ActivatedRoute,
     private modalService: NgbModal,
     private apiService: ApiService,
+    private router: Router
   ) {
-    this.courseList = route.snapshot.data.coursesList;
+    this.courseList = activeRoute.snapshot.data.coursesList;
     authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
     });
@@ -90,6 +91,14 @@ export class MainPage implements OnInit, OnDestroy {
 
       this.subscriber.add(submit$);
     }
+  }
+
+  onLogoutClick(evt: MouseEvent) {
+    evt.preventDefault();
+
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
   }
 
   private updateCourseType(val: COURSE_TYPE) {

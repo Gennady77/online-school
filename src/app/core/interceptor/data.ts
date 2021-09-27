@@ -81,6 +81,14 @@ export function storeCourse(request: HttpParams) {
   localStorage.setItem(USER_MAP_COURSES_STORAGE_KEY, JSON.stringify(userMapCourses));
 }
 
+export function removeUserToken(token: string) {
+  const userMapToken: {[key: string]: number} = JSON.parse(localStorage.getItem(USER_MAP_TOKEN_STORAGE_KEY) ?? '{}');
+
+  delete(userMapToken[token]);
+
+  localStorage.setItem(USER_MAP_TOKEN_STORAGE_KEY, JSON.stringify(userMapToken));
+}
+
 function getNumberOrNull(val: string | null): number | null {
   return val ? parseInt(val as string, 10) : null;
 }

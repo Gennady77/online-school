@@ -37,6 +37,14 @@ export class AuthService {
     )
   }
 
+  logout(): Observable<void> {
+    return this.apiService.post<void>('/logout').pipe(
+      map(() => {
+        this.userSession.onLogout();
+      })
+    )
+  }
+
   private loginFromCookie(): Observable<UserSession> {
     return this.apiService.get<User>('/token').pipe(
       map(response => {

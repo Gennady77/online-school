@@ -1,9 +1,13 @@
 <div class="container">
   <header class="row mb-5 align-items-end border-bottom">
-    <ul ngbNav class="nav col-11">
-      <li ngbNavItem><a [routerLink]="['/']" ngbNavLink>Список курсов</a></li>
-      <li *ngIf="isLoggedIn" ngbNavItem><a [routerLink]="['/courses', '1']" ngbNavLink>Мои курсы</a></li>
-      <li>
+    <ul ngbNav class="nav col-10">
+      <li ngbNavItem>
+        <a [routerLink]="['/']" ngbNavLink>Список курсов</a>
+      </li>
+      <li *ngIf="isLoggedIn" ngbNavItem>
+        <a [routerLink]="['/courses', authService.userId]" ngbNavLink>Мои курсы</a>
+      </li>
+      <li *ngIf="isLoggedIn">
         <a href (click)="onAddClick(content, $event)" title="Создать курс">
           <svg class="p-1" width="36" height="36" fill="currentColor">
             <use xlink:href="#plus-circle"/>
@@ -11,8 +15,9 @@
         </a>
       </li>
     </ul>
-    <div class="login col d-flex justify-content-center">
-      <svg *ngIf="isLoggedIn" class="p-1" width="100%" height="100%" fill="currentColor">
+    <div class="login col-2 d-flex justify-content-end">
+      <a href class="nav-link align-self-end" *ngIf="isLoggedIn" (click)="onLogoutClick($event)">Logout</a>
+      <svg *ngIf="isLoggedIn" class="p-1" width="64" height="64" fill="currentColor">
         <use xlink:href="#person-circle"/>
       </svg>
       <a [routerLink]="['/login']" class="nav-link align-self-end" *ngIf="!isLoggedIn">Login</a>

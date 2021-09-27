@@ -17,4 +17,9 @@ export class UserSession {
     this.isLoggedIn$$.next(true);
     this.user = auth;
   }
+
+  onLogout() {
+    this.isLoggedIn$$.next(false);
+    this.user = undefined;
+  }
 }

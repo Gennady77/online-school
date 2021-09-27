@@ -6,7 +6,7 @@ import {
   HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getUserByToken, getUserCourseList, storeCourse, storeUser } from "./data";
+import { getUserByToken, getUserCourseList, removeUserToken, storeCourse, storeUser } from "./data";
 import { JsonErrorResponse, JsonResponse } from "../../types";
 import { CookieService } from "ngx-cookie-service";
 
@@ -59,6 +59,17 @@ export class HttpMockInterceptor implements HttpInterceptor {
       case '/course':
         if(request.method === 'POST' && request.params.has('userId')) {
           storeCourse(request.params);
+          status = 200;
+        }
+        break;
+      case '/logout':
+        if(request.method === 'POST') {
+          const token = this.cookieService.get('token');
+
+          removeUserToken(token);
+
+          this.cookieService.delete('token');
+
           status = 200;
         }
         break;
