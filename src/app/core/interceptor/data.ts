@@ -30,14 +30,22 @@ const USER_MAP_TOKEN_STORAGE_KEY = 'user_map_token';
 export function storeUser(request: HttpParams, token: string): User {
   const storage: User[] = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) ?? '[]');
   const userMapToken: {[key: string]: number} = JSON.parse(localStorage.getItem(USER_MAP_TOKEN_STORAGE_KEY) ?? '{}');
-  const userId: number = storage.length + 1;
-  const user = {
-    id: userId,
-    email: getString(request.get('userEmail'))
-  };
+
+  let userId: number;
+  let user = storage.find(item => item.email === request.get('userEmail'));
+
+  if(!user) {
+    userId = storage.length + 1;
+    user = {
+      id: userId,
+      email: getString(request.get('userEmail'))
+    }
+    storage.push(user);
+  } else {
+    userId = user.id;
+  }
 
   userMapToken[token] = userId;
-  storage.push(user);
 
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(storage));
   localStorage.setItem(USER_MAP_TOKEN_STORAGE_KEY, JSON.stringify(userMapToken));
