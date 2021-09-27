@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { COURSE_TYPE, CourseData } from "../../types";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../core/service/auth.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppValidators } from "../../core/service/validators";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subscriber } from "rxjs";
 import { ApiService } from "../../core/service/api.service";
-import { finalize } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
 })
-export class MainPage implements OnInit {
+export class MainPage implements OnInit, OnDestroy {
   courseList: CourseData[];
   isLoggedIn = false;
   isLoading$$ = new BehaviorSubject(false);
@@ -42,6 +42,8 @@ export class MainPage implements OnInit {
     courseComment: this.courseComment
   });
 
+  private subscriber = new Subscriber();
+
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -63,23 +65,30 @@ export class MainPage implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy() {
+    this.subscriber.unsubscribe();
+  }
+
   onAddClick(content: any, evt: MouseEvent) {
     evt.preventDefault();
 
     this.modalService.open(content);
   }
 
-  onSubmit() {
+  onSubmit(modal: NgbModalRef) {
     this.formGroup.markAllAsTouched();
-    // modal.close('Ok click');
-    console.log(this.authService.userId);
+
     if(this.formGroup.valid && this.authService.userId) {
-      this.isLoading$$.next(true);
-      this.apiService.post('/course', {userId: this.authService.userId, ...this.formGroup.value}).pipe(
-        finalize(() => {
-          this.isLoading$$.next(false);
-        })
-      );
+      const submit$ = this.apiService.post('/course', {userId: this.authService.userId, ...this.formGroup.value}).pipe(
+        tap(() => {
+          modal.close('Ok click');
+        }),
+        switchMap(() => this.apiService.get<CourseData[]>(`/courses`, {userId: this.authService.userId}))
+      ).subscribe(respCourses => {
+        this.courseList = respCourses;
+      });
+
+      this.subscriber.add(submit$);
     }
   }
 

@@ -7,19 +7,51 @@ export const users: User[] = [];
 export const userCourses: {[key: string]: CourseData[]} = {};
 
 export function getUserCourseList(id: string | null): CourseData[] {
+  const storage: CourseData[] = JSON.parse(localStorage.getItem(COURSES_STORAGE_KEY) ?? '[]');
+
   if(id === null) {
-    return allCourses;
+    return storage;
   }
 
-  if(!userCourses[id]) {
-    userCourses[id] = [];
+  const userMapCourses: {[key: string]: number[]} = JSON.parse(localStorage.getItem(USER_MAP_COURSES_STORAGE_KEY) ?? '{}');
+
+  if(!userMapCourses[id]) {
+    userMapCourses[id] = [];
   }
 
-  return userCourses[id];
+  return userMapCourses[id].map(courseId => storage.find(item => item.courseId === courseId) as CourseData);
 }
 
 const COURSES_STORAGE_KEY = 'courses';
 const USER_MAP_COURSES_STORAGE_KEY = 'users_map_courses';
+const USERS_STORAGE_KEY = 'users';
+const USER_MAP_TOKEN_STORAGE_KEY = 'user_map_token';
+
+export function storeUser(request: HttpParams, token: string): User {
+  const storage: User[] = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) ?? '[]');
+  const userMapToken: {[key: string]: number} = JSON.parse(localStorage.getItem(USER_MAP_TOKEN_STORAGE_KEY) ?? '{}');
+  const userId: number = storage.length + 1;
+  const user = {
+    id: userId,
+    email: getString(request.get('userEmail'))
+  };
+
+  userMapToken[token] = userId;
+  storage.push(user);
+
+  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(storage));
+  localStorage.setItem(USER_MAP_TOKEN_STORAGE_KEY, JSON.stringify(userMapToken));
+
+  return user;
+}
+
+export function getUserByToken(token: string): User | undefined {
+  const storage: User[] = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) ?? '[]');
+  const userMapToken: {[key: string]: number} = JSON.parse(localStorage.getItem(USER_MAP_TOKEN_STORAGE_KEY) ?? '{}');
+  const userId = userMapToken[token];
+
+  return storage.find(item => item.id === userId);
+}
 
 export function storeCourse(request: HttpParams) {
   const storage: CourseData[] = JSON.parse(localStorage.getItem(COURSES_STORAGE_KEY) ?? '[]');

@@ -6,7 +6,7 @@ import {
   HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getUserCourseList, storeCourse, users } from "./data";
+import { getUserByToken, getUserCourseList, storeCourse, storeUser } from "./data";
 import { JsonErrorResponse, JsonResponse } from "../../types";
 import { CookieService } from "ngx-cookie-service";
 
@@ -35,17 +35,9 @@ export class HttpMockInterceptor implements HttpInterceptor {
         break;
       case '/login':
         if(request.method === 'POST' && request.params.has('userEmail')) {
-          let user = users.find(item => item.email === request.params.get('userEmail'));
           const token = (new Date()).getTime() + '';
+          const user = storeUser(request.params, token);
 
-          if (!user) {
-            users.push(user = {
-              id: users.length + 1,
-              email: request.params.get('userEmail') as string
-            });
-          }
-
-          user.token = token;
           this.cookieService.set('token', token);
 
           body.data = user;
@@ -54,7 +46,7 @@ export class HttpMockInterceptor implements HttpInterceptor {
         break;
       case '/token':
         if(request.method === 'GET') {
-          const user = users.find(item => item.token === this.cookieService.get('token'));
+          const user = getUserByToken(this.cookieService.get('token'));
           if (!user) {
             status = 400;
             bodyError.error = 'there is wrong token';
