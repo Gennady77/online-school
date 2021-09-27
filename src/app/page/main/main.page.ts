@@ -84,7 +84,7 @@ export class MainPage implements OnInit, OnDestroy {
         tap(() => {
           modal.close('Ok click');
         }),
-        switchMap(() => this.apiService.get<CourseData[]>(`/courses`, {userId: this.authService.userId}))
+        switchMap(() => this.apiService.get<CourseData[]>(`/courses`, {id: this.authService.userId}))
       ).subscribe(respCourses => {
         this.courseList = respCourses;
       });

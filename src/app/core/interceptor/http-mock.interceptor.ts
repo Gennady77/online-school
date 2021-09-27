@@ -90,7 +90,7 @@ export class HttpMockInterceptor implements HttpInterceptor {
         }
 
         observer.complete();
-      }, 2000);
+      }, 1000);
     });
   }
 }
