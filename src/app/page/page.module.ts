@@ -7,6 +7,7 @@ import { LoginPage } from './login/login.page';
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../shared/shared.module";
+import { CoursesPage } from './courses/courses.page';
 
 
 
@@ -14,7 +15,8 @@ import { SharedModule } from "../shared/shared.module";
   declarations: [
     MainPage,
     NotFoundPage,
-    LoginPage
+    LoginPage,
+    CoursesPage
   ],
   imports: [
     NgbModule,

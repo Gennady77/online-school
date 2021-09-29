@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../core/service/auth.service";
-import { User } from "../../types";
 import { Router } from "@angular/router";
 
 @Component({
@@ -28,8 +27,8 @@ export class LoginPage implements OnInit {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      this.authService.login(this.formGroup.value).subscribe((user: User) => {
-        this.router.navigate([`/courses/${user.id}`]);
+      this.authService.login(this.formGroup.value).subscribe(() => {
+        this.router.navigate([`/courses-user`]);
       });
     }
   }

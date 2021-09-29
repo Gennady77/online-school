@@ -5,7 +5,7 @@
         <a [routerLink]="['/']" ngbNavLink>Список курсов</a>
       </li>
       <li *ngIf="isLoggedIn" ngbNavItem>
-        <a [routerLink]="['/courses', authService.userId]" ngbNavLink>Мои курсы</a>
+        <a [routerLink]="['/courses-user']" ngbNavLink>Мои курсы</a>
       </li>
       <li *ngIf="isLoggedIn">
         <a href (click)="onAddClick(content, $event)" title="Создать курс">
@@ -24,21 +24,7 @@
     </div>
   </header>
   <div class="container">
-    <table class="table" *ngIf="courseList.length">
-      <thead>
-        <tr>
-          <th>Название</th>
-          <th>Дата</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let course of courseList">
-          <td>{{ course.courseName }}</td>
-          <td>{{ course.courseDate | date: 'mediumDate' }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="!courseList.length" class="text-center fs-3 fw-bold">Список курсов пуст.</div>
+    <router-outlet></router-outlet>
   </div>
 </div>
 

@@ -6,7 +6,7 @@ import {
   HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getUserByToken, getUserCourseList, removeUserToken, storeCourse, storeUser } from "./data";
+import { getNumber, getUserByToken, getUserCourseList, removeUserToken, storeCourse, storeUser } from "./data";
 import { JsonErrorResponse, JsonResponse } from "../../types";
 import { CookieService } from "ngx-cookie-service";
 
@@ -27,10 +27,23 @@ export class HttpMockInterceptor implements HttpInterceptor {
     let status = 200;
 
     switch(request.url) {
+      case '/allcourses':
+        if(request.method === 'GET') {
+          body.data = getUserCourseList(null);
+          status = 200;
+        }
+        break;
       case '/courses':
         if(request.method === 'GET') {
-          body.data = getUserCourseList(request.params.get('id'));
-          status = 200;
+          const user = getUserByToken(this.cookieService.get('token'));
+
+          if(!user || user.id !== getNumber(request.params.get('userId'))) {
+            status = 400;
+            bodyError.error = 'wrong permissions';
+          } else {
+            body.data = getUserCourseList(request.params.get('userId'));
+            status = 200;
+          }
         }
         break;
       case '/login':
@@ -38,7 +51,7 @@ export class HttpMockInterceptor implements HttpInterceptor {
           const token = (new Date()).getTime() + '';
           const user = storeUser(request.params, token);
 
-          this.cookieService.set('token', token);
+          this.cookieService.set('token', token, undefined, '/');
 
           body.data = user;
           status = 200;

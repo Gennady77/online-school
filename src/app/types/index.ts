@@ -30,6 +30,7 @@ export type CourseData = {
   coursePlaceBuilding: number | null;
   coursePlaceRoom: number | null;
   courseComment: string;
+  courseAuthor: string;
 }
 
 export type CourseRequest = CourseData | {userId: number};

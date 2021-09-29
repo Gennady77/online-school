@@ -29,7 +29,6 @@ const USER_MAP_TOKEN_STORAGE_KEY = 'user_map_token';
 
 export function storeUser(request: HttpParams, token: string): User {
   const storage: User[] = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) ?? '[]');
-  const userMapToken: {[key: string]: number} = JSON.parse(localStorage.getItem(USER_MAP_TOKEN_STORAGE_KEY) ?? '{}');
 
   let userId: number;
   let user = storage.find(item => item.email === request.get('userEmail'));
@@ -45,12 +44,21 @@ export function storeUser(request: HttpParams, token: string): User {
     userId = user.id;
   }
 
-  userMapToken[token] = userId;
+  storeUserMapToken(token, userId);
 
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(storage));
-  localStorage.setItem(USER_MAP_TOKEN_STORAGE_KEY, JSON.stringify(userMapToken));
 
   return user;
+}
+
+function storeUserMapToken(token: string, userId: number) {
+  let userMapToken: {[key: string]: number} = JSON.parse(localStorage.getItem(USER_MAP_TOKEN_STORAGE_KEY) ?? '{}');
+
+  userMapToken = Object.fromEntries(Object.entries(userMapToken).filter(([_, value]) => value !== userId));
+
+  userMapToken[token] = userId;
+
+  localStorage.setItem(USER_MAP_TOKEN_STORAGE_KEY, JSON.stringify(userMapToken));
 }
 
 export function getUserByToken(token: string): User | undefined {
@@ -59,6 +67,12 @@ export function getUserByToken(token: string): User | undefined {
   const userId = userMapToken[token];
 
   return storage.find(item => item.id === userId);
+}
+
+function getUserById(id: number): User | undefined {
+  const storage: User[] = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) ?? '[]');
+
+  return storage.find(item => item.id === id);
 }
 
 export function storeCourse(request: HttpParams) {
@@ -76,7 +90,8 @@ export function storeCourse(request: HttpParams) {
     courseUrl: request.get('courseUrl'),
     coursePlaceBuilding: getNumberOrNull(request.get('coursePlaceBuilding')),
     coursePlaceRoom: getNumberOrNull(request.get('coursePlaceRoom')),
-    courseComment: getString(request.get('courseComment'))
+    courseComment: getString(request.get('courseComment')),
+    courseAuthor: getUserById(userId)?.email ?? 'system'
   });
 
   if(userId && !userMapCourses[userId]) {
@@ -101,7 +116,7 @@ function getNumberOrNull(val: string | null): number | null {
   return val ? parseInt(val as string, 10) : null;
 }
 
-function getNumber(val: string | null, defval = 0): number {
+export function getNumber(val: string | null, defval = 0): number {
   return val ? parseInt(val as string, 10) : defval;
 }
 

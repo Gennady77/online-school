@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { COURSE_TYPE, CourseData } from "../../types";
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { COURSE_TYPE } from "../../types";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../core/service/auth.service";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
@@ -7,7 +7,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppValidators } from "../../core/service/validators";
 import { BehaviorSubject, Subscriber } from "rxjs";
 import { ApiService } from "../../core/service/api.service";
-import { switchMap, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-main',
@@ -15,10 +15,9 @@ import { switchMap, tap } from "rxjs/operators";
   styleUrls: ['./main.page.scss'],
 })
 export class MainPage implements OnInit, OnDestroy {
-  courseList: CourseData[];
   isLoggedIn = false;
-  isLoading$$ = new BehaviorSubject(false);
 
+  isLoading$$ = new BehaviorSubject(false);
   courseTypeEnum = COURSE_TYPE;
 
   courseName = new FormControl('', [AppValidators.required()]);
@@ -46,12 +45,12 @@ export class MainPage implements OnInit, OnDestroy {
 
   constructor(
     public authService: AuthService,
+    public modalService: NgbModal,
     private activeRoute: ActivatedRoute,
-    private modalService: NgbModal,
-    private apiService: ApiService,
-    private router: Router
+    private ngbModalService: NgbModal,
+    private router: Router,
+    private apiService: ApiService
   ) {
-    this.courseList = activeRoute.snapshot.data.coursesList;
     authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
     });
@@ -70,10 +69,20 @@ export class MainPage implements OnInit, OnDestroy {
     this.subscriber.unsubscribe();
   }
 
-  onAddClick(content: any, evt: MouseEvent) {
+  onAddClick(content: TemplateRef<any>, evt: MouseEvent) {
     evt.preventDefault();
 
     this.modalService.open(content);
+  }
+
+  onLogoutClick(evt: MouseEvent) {
+    evt.preventDefault();
+
+    const logout$ = this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
+
+    this.subscriber.add(logout$);
   }
 
   onSubmit(modal: NgbModalRef) {
@@ -84,21 +93,12 @@ export class MainPage implements OnInit, OnDestroy {
         tap(() => {
           modal.close('Ok click');
         }),
-        switchMap(() => this.apiService.get<CourseData[]>(`/courses`, {id: this.authService.userId}))
-      ).subscribe(respCourses => {
-        this.courseList = respCourses;
+      ).subscribe(() => {
+        this.router.navigate([this.router.url]);
       });
 
       this.subscriber.add(submit$);
     }
-  }
-
-  onLogoutClick(evt: MouseEvent) {
-    evt.preventDefault();
-
-    this.authService.logout().subscribe(() => {
-      this.router.navigate(['/']);
-    });
   }
 
   private updateCourseType(val: COURSE_TYPE) {

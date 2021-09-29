@@ -1,0 +1,17 @@
+<table class="table" *ngIf="courseList.length">
+  <thead>
+  <tr>
+    <th>Название</th>
+    <th>Автор</th>
+    <th>Дата</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let course of courseList">
+    <td>{{ course.courseName }}</td>
+    <td>{{ course.courseAuthor }}</td>
+    <td>{{ course.courseDate | date: 'mediumDate' }}</td>
+  </tr>
+  </tbody>
+</table>
+<div *ngIf="!courseList.length" class="text-center fs-3 fw-bold">Список курсов пуст.</div>
