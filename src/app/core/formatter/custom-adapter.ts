@@ -6,7 +6,6 @@ import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap/datepicker/ngb-date-st
 export class CustomAdapter extends NgbDateAdapter<number> {
 
   fromModel(value: number | null): NgbDateStruct | null {
-    console.log();
     if (value) {
       let date = new Date(value);
       return {
